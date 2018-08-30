@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Prototype.Extensions;
+﻿using Prototype.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Prototype
 {
@@ -17,6 +10,7 @@ namespace Prototype
     {
         public Startup(IConfiguration configuration)
         {
+            NLog.LogManager.LoadConfiguration(string.Concat(System.IO.Directory.GetCurrentDirectory(),"/nlog.config"));
             Configuration = configuration;
         }
 
@@ -27,6 +21,7 @@ namespace Prototype
         {
             services.ConfigureRepository(Configuration);
             services.ConfigureBll();
+            services.ConfigureLoggerService();
 
             services.AddMvc();
         }
@@ -38,6 +33,8 @@ namespace Prototype
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.ConfigureMiddleware();
 
             app.UseMvc();
         }

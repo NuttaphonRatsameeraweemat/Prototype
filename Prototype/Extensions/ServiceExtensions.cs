@@ -5,6 +5,9 @@ using Prototype.Data;
 using Microsoft.EntityFrameworkCore;
 using Prototype.Bll.Interfaces;
 using Prototype.Bll;
+using Prototype.Helper.Interfaces;
+using Prototype.Helper;
+using Microsoft.AspNetCore.Builder;
 
 namespace Prototype.Extensions
 {
@@ -31,6 +34,21 @@ namespace Prototype.Extensions
         public static void ConfigureBll(this IServiceCollection services)
         {
             services.AddScoped<IHrEmployee, HrEmployee>();
+        }
+
+        /// <summary>
+        /// Add Singletion Logger Class
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+        }
+
+        
+        public static void ConfigureMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<Middleware>();
         }
 
     }
