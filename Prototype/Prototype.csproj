@@ -10,6 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Prototype.Bll\Prototype.Bll.csproj" />
+    <ProjectReference Include="..\Prototype.Data\Prototype.Data.csproj" />
+    <ProjectReference Include="..\Prototype.Helper\Prototype.Helper.csproj" />
   </ItemGroup>
 
 </Project>
