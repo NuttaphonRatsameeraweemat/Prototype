@@ -39,6 +39,7 @@ namespace Prototype.Extensions
         public static void ConfigureBll(this IServiceCollection services)
         {
             services.AddScoped<IHrEmployee, HrEmployee>();
+            services.AddScoped<ILogin, Login>();
         }
 
         /// <summary>
