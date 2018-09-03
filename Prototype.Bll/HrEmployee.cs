@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using AutoMapper;
+using Prototype.Bll.Models;
 
 namespace Prototype.Bll
 {
@@ -17,6 +19,11 @@ namespace Prototype.Bll
         /// </summary>
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// The auto mapper.
+        /// </summary>
+        private readonly IMapper _mapper;
+
         #endregion
 
         #region Constructors
@@ -25,9 +32,10 @@ namespace Prototype.Bll
         /// Initializes a new instance of the <see cref="HrEmployee" /> class.
         /// </summary>
         /// <param name="unitOfWork">The utilities unit of work.</param>
-        public HrEmployee(IUnitOfWork unitOfWork)
+        public HrEmployee(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         #endregion
@@ -38,9 +46,9 @@ namespace Prototype.Bll
         /// Get all employee.
         /// </summary>
         /// <returns>IEnumerable Hremployee Type</returns>
-        public IEnumerable<Hremployee> GetEmployee()
+        public IEnumerable<HrEmployeeViewModel> GetEmployee()
         {
-            return _unitOfWork.GetRepository<Hremployee>().Get();
+            return _mapper.Map<IEnumerable<Hremployee>, IEnumerable<HrEmployeeViewModel>>(_unitOfWork.GetRepository<Hremployee>().Get());
         }
 
         /// <summary>
@@ -48,9 +56,9 @@ namespace Prototype.Bll
         /// </summary>
         /// <param name="EmpNo"></param>>
         /// <returns>IEnumerable Hremployee Type</returns>
-        public Hremployee GetEmployee(string empNo)
+        public HrEmployeeViewModel GetEmployee(string empNo)
         {
-            return _unitOfWork.GetRepository<Hremployee>().Get(x => x.EmpNo == empNo).FirstOrDefault();
+            return _mapper.Map<Hremployee, HrEmployeeViewModel>(_unitOfWork.GetRepository<Hremployee>().Get(x => x.EmpNo == empNo).FirstOrDefault());
         }
 
         #endregion

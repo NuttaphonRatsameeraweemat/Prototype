@@ -40,8 +40,8 @@ namespace Prototype.Controllers
         }
 
         [HttpGet]
-        [Route("GetEmployee")]
-        public IActionResult GetEmployee(string empNo)
+        [Route("GetByEmpNo")]
+        public IActionResult GetByEmpNo(string empNo)
         {
             return Ok(_hremployee.GetEmployee(empNo));
         }

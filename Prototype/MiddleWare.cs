@@ -24,7 +24,7 @@ namespace Prototype
         private readonly ILoggerManager _logger;
 
         #endregion
-        
+
         #region [Constructors]
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Prototype
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.LogError(ex, "The Errors Message : ");
                 await HandleExceptionAsync(httpContext, ex);
             }
             EndInvoke(httpContext);
@@ -103,6 +103,6 @@ namespace Prototype
         }
 
         #endregion
-        
+
     }
 }
