@@ -45,7 +45,10 @@ namespace Prototype.Extensions
             services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 
-        
+        /// <summary>
+        /// Add Middleware when request bein and end.
+        /// </summary>
+        /// <param name="app"></param>
         public static void ConfigureMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<Middleware>();

@@ -4,6 +4,7 @@ using Prototype.Data.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Prototype.Bll
 {
@@ -40,6 +41,16 @@ namespace Prototype.Bll
         public IEnumerable<Hremployee> GetEmployee()
         {
             return _unitOfWork.GetRepository<Hremployee>().Get();
+        }
+
+        /// <summary>
+        /// Get employee by id.
+        /// </summary>
+        /// <param name="EmpNo"></param>>
+        /// <returns>IEnumerable Hremployee Type</returns>
+        public Hremployee GetEmployee(string empNo)
+        {
+            return _unitOfWork.GetRepository<Hremployee>().Get(x => x.EmpNo == empNo).FirstOrDefault();
         }
 
         #endregion

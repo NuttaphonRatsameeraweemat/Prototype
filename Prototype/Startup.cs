@@ -19,6 +19,7 @@ namespace Prototype
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Add Configure Extension and Bll class.
             services.ConfigureRepository(Configuration);
             services.ConfigureBll();
             services.ConfigureLoggerService();

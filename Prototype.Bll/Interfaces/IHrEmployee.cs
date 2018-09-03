@@ -8,5 +8,7 @@ namespace Prototype.Bll.Interfaces
     public interface IHrEmployee
     {
         IEnumerable<Hremployee> GetEmployee();
+
+        Hremployee GetEmployee(string empNo);
     }
 }
