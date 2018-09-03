@@ -23,7 +23,8 @@ namespace Prototype
             services.ConfigureRepository(Configuration);
             services.ConfigureBll();
             services.ConfigureLoggerService();
-
+            services.ConfigureJwtAuthen(Configuration);
+            
             services.AddMvc();
         }
 
@@ -34,6 +35,8 @@ namespace Prototype
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
 
             app.ConfigureMiddleware();
 
