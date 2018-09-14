@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Prototype.Extensions
 {
@@ -105,6 +106,47 @@ namespace Prototype.Extensions
                      },
                  };
              });
+        }
+
+        public static void ConfigureCookieAuthen(this IServiceCollection services, IConfiguration Configuration)
+        {
+            var option = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = System.TimeSpan.Zero,
+                ValidIssuer = Configuration["Jwt:Issuer"],
+                ValidAudience = Configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+            };
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.CookieName = "access_token";
+                        options.SlidingExpiration = true;
+                        options.Events.OnRedirectToLogin = context =>
+                        {
+                            var model = new
+                            {
+                                ErrorFlag = true,
+                                Message = "Unauthorized."
+                            };
+                            string json = JsonConvert.SerializeObject(model, new JsonSerializerSettings
+                            {
+                                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                            });
+                            context.Response.StatusCode = (int)System.Net.HttpStatusCode.Unauthorized;
+                            context.Response.OnStarting(async () =>
+                            {
+                                context.Response.ContentType = "application/json";
+                                await context.Response.WriteAsync(json);
+                            });
+                            return System.Threading.Tasks.Task.CompletedTask;
+                        };
+                        options.TicketDataFormat = new CookieAuthenticateFormat(SecurityAlgorithms.HmacSha256, option);
+                    });
         }
 
     }

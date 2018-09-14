@@ -25,6 +25,7 @@ namespace Prototype
             services.ConfigureBll();
             services.ConfigureLoggerService();
             services.ConfigureJwtAuthen(Configuration);
+            services.ConfigureCookieAuthen(Configuration);
 
             services.AddAutoMapper();
             services.AddMvc();
