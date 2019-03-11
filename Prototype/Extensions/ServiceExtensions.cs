@@ -14,6 +14,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace Prototype.Extensions
 {
@@ -44,6 +46,15 @@ namespace Prototype.Extensions
         }
 
         /// <summary>
+        /// Dependency Injection Httpcontext.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        public static void ConfigureHttpContextAccessor(this IServiceCollection services)
+        {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        }
+
+        /// <summary>
         /// Add Singletion Logger Class
         /// </summary>
         /// <param name="services">The service collection.</param>
@@ -59,6 +70,67 @@ namespace Prototype.Extensions
         public static void ConfigureMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<Middleware>();
+        }
+
+        /// <summary>
+        /// Add CORS Configuration.
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+        }
+
+        /// <summary>
+        /// Add Swagger.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        public static void AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+
+                // Swagger 2.+ support
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "Header",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(security);
+
+            });
+        }
+
+        /// <summary>
+        /// Add Swagger.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        public static void ConfigureSwagger(this IApplicationBuilder app)
+        {
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
 
         /// <summary>
@@ -124,7 +196,7 @@ namespace Prototype.Extensions
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
-                        options.CookieName = "access_token";
+                        options.Cookie.Name = "access_token";
                         options.SlidingExpiration = true;
                         options.Events.OnRedirectToLogin = context =>
                         {

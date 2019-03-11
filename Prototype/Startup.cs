@@ -24,11 +24,13 @@ namespace Prototype
             services.ConfigureRepository(Configuration);
             services.ConfigureBll();
             services.ConfigureLoggerService();
+            services.ConfigureCors();
             services.ConfigureJwtAuthen(Configuration);
             services.ConfigureCookieAuthen(Configuration);
 
             services.AddAutoMapper();
             services.AddMvc();
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +44,10 @@ namespace Prototype
             app.UseAuthentication();
 
             app.ConfigureMiddleware();
+
+            app.ConfigureSwagger();
+
+            app.UseCors("CorsPolicy");
 
             app.UseMvc();
         }
