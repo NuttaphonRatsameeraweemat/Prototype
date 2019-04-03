@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Prototype
 {
@@ -29,7 +30,10 @@ namespace Prototype
             services.ConfigureCookieAuthen(Configuration);
 
             services.AddAutoMapper();
-            services.AddMvc();
+            services.AddMvc(opt =>
+            {
+                opt.UseApiGlobalConfigRoutePrefix(new RouteAttribute("api"));
+            });
             services.AddSwagger();
         }
 

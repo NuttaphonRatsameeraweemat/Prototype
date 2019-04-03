@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Prototype.Extensions
 {
@@ -61,6 +63,16 @@ namespace Prototype.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
+        }
+
+        /// <summary>
+        /// Config Api Routes Prefix.
+        /// </summary>
+        /// <param name="opts">The MvcOptions.</param>
+        /// <param name="routeAttribute">The IRouteTemplateProvider.</param>
+        public static void UseApiGlobalConfigRoutePrefix(this MvcOptions opts, IRouteTemplateProvider routeAttribute)
+        {
+            opts.Conventions.Insert(0, new ApiGlobalPrefixRouteProvider(routeAttribute));
         }
 
         /// <summary>
