@@ -99,6 +99,7 @@ namespace Prototype.Data.Repository.EF
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
