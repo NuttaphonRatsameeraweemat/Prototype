@@ -11,7 +11,7 @@ namespace Prototype.Helper
         /// <summary>
         /// Redis cache ConnectionMultiplexer.
         /// </summary>
-        private static Lazy<ConnectionMultiplexer> _lazyConnection;
+        private static ConnectionMultiplexer _connection;
 
         #endregion
 
@@ -33,15 +33,12 @@ namespace Prototype.Helper
                     throw new InvalidOperationException("Missing ConnectionString property value.");
                 }
 
-                if (_lazyConnection == null)
+                if (_connection == null)
                 {
-                    _lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-                    {
-                        return ConnectionMultiplexer.Connect(ConnectionString);
-                    });
+                    _connection = ConnectionMultiplexer.Connect(ConnectionString);
                 }
 
-                return _lazyConnection.Value;
+                return _connection;
             }
         }
         #endregion
